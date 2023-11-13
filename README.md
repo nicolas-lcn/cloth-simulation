@@ -1,2 +1,5 @@
-# cloth-simulation
-Simulation d'objets non rigide par système masse-ressort
+# Simulation d'objets non rigide
+
+Projet étudiant
+
+Simulation de textile par système masse-ressort
