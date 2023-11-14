@@ -1,0 +1,4 @@
+#ifndef MASSPARTICLE_H
+#define MASSPARTICLE_H
+
+#endif // MASSPARTICLE_H
