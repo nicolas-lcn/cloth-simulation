@@ -71,6 +71,7 @@ GLWidget::GLWidget(QWidget *parent)
         fmt.setAlphaBufferSize(8);
         setFormat(fmt);
     }
+
 }
 
 GLWidget::~GLWidget()

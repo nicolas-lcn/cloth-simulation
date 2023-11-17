@@ -6,12 +6,18 @@ INCLUDEPATH +=  external/glm-0.9.7.1/
 
 HEADERS       = glwidget.h \
                 MassParticle.h \
-                Sphere.h \
                 Spring.h \
+                massspringsystem.h \
+                mesh.h \
+                simulationmanager.h \
                 window.h \
                 mainwindow.h
 SOURCES       = glwidget.cpp \
+                MassParticle.cpp \
+                Spring.cpp \
                 main.cpp \
+                massspringsystem.cpp \
+                simulationmanager.cpp \
                 window.cpp \
                 mainwindow.cpp
 
