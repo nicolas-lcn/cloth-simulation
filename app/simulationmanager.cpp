@@ -21,10 +21,21 @@ void SimulationManager::initialize()
 
     MassParticle *massFixed = system->addParticle(1, QVector3D(0.0, 0.7, 0.0));
     massFixed->setIsFixed(true);
-    MassParticle *a = system->addParticle(1, QVector3D(0.1, 0.4, 0.0));
-    MassParticle *b = system->addParticle(1, QVector3D(0.2, 0.5, 0.0));
-    Spring *s = system->addSpring(150.0f, 50.0f, 0.1f, massFixed, a);
-    Spring *s_a_b = system->addSpring(98.0, 50.0f, 0.1f, a, b);
+    MassParticle *precedent = massFixed;
+    float y=0.6;
+    MassParticle *a, *b;
+    Spring *s_p_a, *s_a_b;
+    for(int i=0; i<4; i+=2)
+    {
+        a = system->addParticle(1, QVector3D(0.0, y, 0.0));
+        y-=0.1f;
+        b = system->addParticle(1, QVector3D(0.0, y, 0.0));
+        y-=0.1f;
+        s_p_a = system->addSpring(180.0f, 15.0f, 0.1f, precedent, a);
+        s_a_b = system->addSpring(180.0, 15.0f, 0.1f, a, b);
+        precedent = b;
+    }
+
 
 }
 
