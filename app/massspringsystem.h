@@ -20,6 +20,7 @@ public:
     MassParticle *addParticle(float mass, QVector3D position);
     Spring *addSpring(float k, float mu, float d_rest, MassParticle* a, MassParticle *b);
 
+    MassParticle *getParticle(int index);
     void update(float dt);
 
     void draw();

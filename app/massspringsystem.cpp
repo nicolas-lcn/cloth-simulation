@@ -1,6 +1,7 @@
 #include "MassParticle.h"
 #include "Spring.h"
 #include "massspringsystem.h"
+#include <stdio.h>
 
 MassSpringSystem::MassSpringSystem()
 {
@@ -35,6 +36,11 @@ Spring *MassSpringSystem::addSpring(float k, float mu, float d_rest, MassParticl
     return spring;
 }
 
+MassParticle *MassSpringSystem::getParticle(int index)
+{
+    return particles[index];
+}
+
 void MassSpringSystem::update(float dt)
 {
     for(MassParticle *p : particles)
@@ -48,9 +54,12 @@ void MassSpringSystem::draw()
     for(MassParticle *p: particles)
     {
         p->draw();
+
     }
     for(Spring *s : springs)
     {
         s->draw();
+
     }
+
 }

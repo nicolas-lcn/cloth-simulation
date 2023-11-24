@@ -3,7 +3,8 @@
 
 #ifndef SPRING_H
 #define SPRING_H
-
+class MassParticle;
+class Mesh;
 class Spring
 {
 public:
@@ -21,7 +22,7 @@ public:
     void draw();
 
 
-    Mesh *getMesh() const;
+    const Mesh *getMesh() const;
     void setMesh(Mesh *newMesh);
 
 private:
@@ -29,10 +30,10 @@ private:
     float mu; //friction pour damping
     float d_rest; //distance au repos
 
-    MassParticle *massA;
-    MassParticle *massB;
+    const MassParticle *massA;
+    const MassParticle *massB;
 
-    Mesh *mesh;
+    const Mesh *mesh;
 
 };
 

@@ -59,7 +59,7 @@
 #include "logo.h"
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
-
+class SimulationManager;
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -75,23 +75,20 @@ public:
     QSize sizeHint() const override;
 
 public slots:
-    //Completer : ajouter des slots pour signaler appliquer le changement de rotation
-    void setXRotation(int angle);
-    void setYRotation(int angle);
-    void setZRotation(int angle);
+    void paintGL() override;
+    void updateSimulation();
     void cleanup();
 
 signals:
 
-    //Completer : ajouter des signaux pour signaler des changement de rotation
 
 
 protected:
     void initializeGL() override;
-    void paintGL() override;
     void resizeGL(int width, int height) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     void setupVertexAttribs();
@@ -112,6 +109,10 @@ private:
     QMatrix4x4 m_view;
     QMatrix4x4 m_model;
     static bool m_transparent;
+
+    QTimer *drawTimer;
+    QTimer *updateTimer;
+    SimulationManager *simManager;
 };
 
 #endif

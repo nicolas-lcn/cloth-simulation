@@ -1,17 +1,22 @@
 #ifndef SIMULATIONMANAGER_H
 #define SIMULATIONMANAGER_H
 
-#include <QTimer>
+#include <QElapsedTimer>
 
 
-
+class MassSpringSystem;
 class SimulationManager
 {
 public:
     SimulationManager();
+    ~SimulationManager();
+    void initialize();
+    void updateSystem();
+    void drawSystem();
 
 private:
-    QTimer* deltaTimer;
+    QElapsedTimer *deltaTimer;
+    MassSpringSystem *system;
 };
 
 #endif // SIMULATIONMANAGER_H

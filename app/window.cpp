@@ -64,7 +64,7 @@ Window::Window(MainWindow *mw)
     : mainWindow(mw)
 {
     glWidget = new GLWidget;
-
+    mainWindow->setFixedSize(1000, 1000);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;

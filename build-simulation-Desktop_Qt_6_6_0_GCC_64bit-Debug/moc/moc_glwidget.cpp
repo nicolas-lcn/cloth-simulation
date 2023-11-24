@@ -39,42 +39,34 @@ namespace {
 struct qt_meta_stringdata_CLASSGLWidgetENDCLASS_t {};
 static constexpr auto qt_meta_stringdata_CLASSGLWidgetENDCLASS = QtMocHelpers::stringData(
     "GLWidget",
-    "setXRotation",
+    "paintGL",
     "",
-    "angle",
-    "setYRotation",
-    "setZRotation",
+    "updateSimulation",
     "cleanup"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSGLWidgetENDCLASS_t {
-    uint offsetsAndSizes[14];
+    uint offsetsAndSizes[10];
     char stringdata0[9];
-    char stringdata1[13];
+    char stringdata1[8];
     char stringdata2[1];
-    char stringdata3[6];
-    char stringdata4[13];
-    char stringdata5[13];
-    char stringdata6[8];
+    char stringdata3[17];
+    char stringdata4[8];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSGLWidgetENDCLASS_t::offsetsAndSizes) + ofs), len 
 Q_CONSTINIT static const qt_meta_stringdata_CLASSGLWidgetENDCLASS_t qt_meta_stringdata_CLASSGLWidgetENDCLASS = {
     {
         QT_MOC_LITERAL(0, 8),  // "GLWidget"
-        QT_MOC_LITERAL(9, 12),  // "setXRotation"
-        QT_MOC_LITERAL(22, 0),  // ""
-        QT_MOC_LITERAL(23, 5),  // "angle"
-        QT_MOC_LITERAL(29, 12),  // "setYRotation"
-        QT_MOC_LITERAL(42, 12),  // "setZRotation"
-        QT_MOC_LITERAL(55, 7)   // "cleanup"
+        QT_MOC_LITERAL(9, 7),  // "paintGL"
+        QT_MOC_LITERAL(17, 0),  // ""
+        QT_MOC_LITERAL(18, 16),  // "updateSimulation"
+        QT_MOC_LITERAL(35, 7)   // "cleanup"
     },
     "GLWidget",
-    "setXRotation",
+    "paintGL",
     "",
-    "angle",
-    "setYRotation",
-    "setZRotation",
+    "updateSimulation",
     "cleanup"
 };
 #undef QT_MOC_LITERAL
@@ -87,7 +79,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSGLWidgetENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -95,15 +87,13 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSGLWidgetENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   38,    2, 0x0a,    1 /* Public */,
-       4,    1,   41,    2, 0x0a,    3 /* Public */,
-       5,    1,   44,    2, 0x0a,    5 /* Public */,
-       6,    0,   47,    2, 0x0a,    7 /* Public */,
+       1,    0,   32,    2, 0x0a,    1 /* Public */,
+       3,    0,   33,    2, 0x0a,    2 /* Public */,
+       4,    0,   34,    2, 0x0a,    3 /* Public */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -118,15 +108,10 @@ Q_CONSTINIT const QMetaObject GLWidget::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSGLWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<GLWidget, std::true_type>,
-        // method 'setXRotation'
+        // method 'paintGL'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'setYRotation'
+        // method 'updateSimulation'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'setZRotation'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'cleanup'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
@@ -139,13 +124,13 @@ void GLWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         auto *_t = static_cast<GLWidget *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->setXRotation((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 1: _t->setYRotation((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 2: _t->setZRotation((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 3: _t->cleanup(); break;
+        case 0: _t->paintGL(); break;
+        case 1: _t->updateSimulation(); break;
+        case 2: _t->cleanup(); break;
         default: ;
         }
     }
+    (void)_a;
 }
 
 const QMetaObject *GLWidget::metaObject() const
@@ -169,13 +154,13 @@ int GLWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 3)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 3;
     }
     return _id;
 }

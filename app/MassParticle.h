@@ -1,3 +1,4 @@
+#include <QVector3D>
 #include <mesh.h>
 #include <vector>
 
@@ -25,7 +26,7 @@ public:
     void addSpring(Spring* spring);
 
 
-    Mesh* getMesh() const;
+    const Mesh *getMesh() const;
     void setMesh(const Mesh *newMesh);
 
     bool IsFixed() const;
@@ -35,7 +36,7 @@ private:
     float mass;
     QVector3D position, velocity;
 
-    Mesh *mesh;
+    const Mesh *mesh;
 
     bool isFixed = false;
 
@@ -76,7 +77,7 @@ inline void MassParticle::setVelocity(const QVector3D &newVelocity)
     velocity = newVelocity;
 }
 
-inline Mesh *MassParticle::getMesh() const
+inline const Mesh *MassParticle::getMesh() const
 {
     return mesh;
 }
@@ -100,6 +101,6 @@ inline void MassParticle::setIsFixed(bool newIsFixed)
 
 
 inline MassParticle::MassParticle(float mass, const QVector3D &position) : mass(mass),
-    position(position)
+    position(position), isFixed(false)
 {}
 

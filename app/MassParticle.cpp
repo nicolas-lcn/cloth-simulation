@@ -1,6 +1,8 @@
 #include "MassParticle.h"
 #include "mesh.h"
 #include "Spring.h"
+#include <QtOpenGL>
+#include <cstdio>
 
 QVector3D MassParticle::computeForces()
 {
@@ -12,25 +14,26 @@ QVector3D MassParticle::computeForces()
     {
         F_springs += springs[i]->getForce(this);
     }
-    return F_weight + F_springs;
+    return F_springs + F_weight;
 }
 
 void MassParticle::update(float dt)
 {
     if(isFixed) return;
 
-    QVector3D acceleration = computeForces()/mass;
+    QVector3D forces = computeForces();
+    QVector3D acceleration = forces/mass;
 
-    velocity = velocity + acceleration * dt;
+    velocity = velocity + dt * acceleration;
     position = position + velocity * dt;
 }
 
 void MassParticle::draw()
 {
     glColor4f(0.0, 0.5, 1.0, 1.0);
-    glPointSize(2.0);
+    glPointSize(5.0);
     glBegin(GL_POINTS);
-    glVertex3f(position.x, position.y, position.z);
+    glVertex3f(position.x(), position.y(), position.z());
     glEnd();
 }
 

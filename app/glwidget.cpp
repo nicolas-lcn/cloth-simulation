@@ -53,6 +53,8 @@
 #include <QOpenGLShaderProgram>
 #include <QCoreApplication>
 #include <math.h>
+#include <QTimer>
+#include "simulationmanager.h"
 
 bool GLWidget::m_transparent = false;
 
@@ -63,6 +65,7 @@ GLWidget::GLWidget(QWidget *parent)
       m_zRot(0),
       m_program(0)
 {
+    setUpdatesEnabled(true);
     m_core = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
     // --transparent causes the clear color to be transparent. Therefore, on systems that
     // support it, the widget will become transparent apart from the logo.
@@ -71,12 +74,27 @@ GLWidget::GLWidget(QWidget *parent)
         fmt.setAlphaBufferSize(8);
         setFormat(fmt);
     }
+    // initialize update/draw timers
+    float updatesPerSecond = 120;
+    float drawsPerSecond = 60;
+
+    drawTimer = new QTimer(this);
+    connect(drawTimer, SIGNAL(timeout()), this, SLOT(update()));
+    drawTimer->start(1000.0/drawsPerSecond);
+
+    updateTimer = new QTimer(this);
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateSimulation()));
+    updateTimer->start(1000.0/updatesPerSecond);
+
+    simManager = new SimulationManager();
+    simManager->initialize();
 
 }
 
 GLWidget::~GLWidget()
 {
     cleanup();
+    delete(simManager);
 }
 
 QSize GLWidget::minimumSizeHint() const
@@ -95,39 +113,6 @@ static void qNormalizeAngle(int &angle)
         angle += 360 * 16;
     while (angle > 360 * 16)
         angle -= 360 * 16;
-}
-
-void GLWidget::setXRotation(int angle)
-{
-    qNormalizeAngle(angle);
-    if (angle != m_xRot) {
-        m_xRot = angle;
-        //Completer pour emettre un signal
-
-        update();
-    }
-}
-
-void GLWidget::setYRotation(int angle)
-{
-    qNormalizeAngle(angle);
-    if (angle != m_yRot) {
-        m_yRot = angle;
-        //Completer pour emettre un signal
-
-        update();
-    }
-}
-
-void GLWidget::setZRotation(int angle)
-{
-    qNormalizeAngle(angle);
-    if (angle != m_zRot) {
-        m_zRot = angle;
-        //Completer pour emettre un signal
-
-        update();
-    }
 }
 
 void GLWidget::cleanup()
@@ -153,52 +138,63 @@ void GLWidget::initializeGL()
     connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &GLWidget::cleanup);
 
     initializeOpenGLFunctions();
-    glClearColor(0, 0, 0, m_transparent ? 0 : 1);
+    static const GLfloat lightPos[4] = { 20.0f, 20.0f, 20.0f, 1.0f };
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    m_program = new QOpenGLShaderProgram;
-    // Compile vertex shader
-    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
-        close();
+//    glClearColor(0, 0, 0, m_transparent ? 0 : 1);
 
-    // Compile fragment shader
-    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fshader.glsl"))
-        close();
+//    m_program = new QOpenGLShaderProgram;
+//    // Compile vertex shader
+//    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
+//        close();
 
-    m_program->bindAttributeLocation("vertex", 0);
-    m_program->bindAttributeLocation("normal", 1);
+//    // Compile fragment shader
+//    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fshader.glsl"))
+//        close();
 
-    // Link shader pipeline
-    if (!m_program->link())
-        close();
+//    m_program->bindAttributeLocation("vertex", 0);
+//    m_program->bindAttributeLocation("normal", 1);
 
-    // Bind shader pipeline for use
-    if (!m_program->bind())
-        close();
+//    // Link shader pipeline
+//    if (!m_program->link())
+//        close();
 
-    m_mvp_matrix_loc = m_program->uniformLocation("mvp_matrix");
-    m_normal_matrix_loc = m_program->uniformLocation("normal_matrix");
-    m_light_pos_loc = m_program->uniformLocation("light_position");
+//    // Bind shader pipeline for use
+//    if (!m_program->bind())
+//        close();
 
-    // Create a vertex array object. In OpenGL ES 2.0 and OpenGL 2.x
-    // implementations this is optional and support may not be present
-    // at all. Nonetheless the below code works in all cases and makes
-    // sure there is a VAO when one is needed.
-    m_vao.create();
-    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
+//    m_mvp_matrix_loc = m_program->uniformLocation("mvp_matrix");
+//    m_normal_matrix_loc = m_program->uniformLocation("normal_matrix");
+//    m_light_pos_loc = m_program->uniformLocation("light_position");
 
-    // Setup our vertex buffer object.
+//    // Create a vertex array object. In OpenGL ES 2.0 and OpenGL 2.x
+//    // implementations this is optional and support may not be present
+//    // at all. Nonetheless the below code works in all cases and makes
+//    // sure there is a VAO when one is needed.
+//    m_vao.create();
+//    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
 
-    // Store the vertex attribute bindings for the program.
-    setupVertexAttribs();
+//    // Setup our vertex buffer object.
 
-    // Our camera never changes in this example.
-    m_view.setToIdentity();
-    m_view.translate(0, 0, -1);
+//    // Store the vertex attribute bindings for the program.
+//    setupVertexAttribs();
 
-    // Light position is fixed.
-    m_program->setUniformValue(m_light_pos_loc, QVector3D(0, 0, 70));
+//    // Our camera never changes in this example.
+//    m_view.setToIdentity();
+//    m_view.translate(0, 0, -1);
 
-    m_program->release();
+//    // Light position is fixed.
+//    m_program->setUniformValue(m_light_pos_loc, QVector3D(0, 0, 70));
+
+//    m_program->release();
 }
 
 void GLWidget::setupVertexAttribs()
@@ -216,24 +212,30 @@ void GLWidget::paintGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    m_model.setToIdentity();
-    m_model.rotate(180.0f - (m_xRot / 16.0f), 1, 0, 0);
-    m_model.rotate(m_yRot / 16.0f, 0, 1, 0);
-    m_model.rotate(m_zRot / 16.0f, 0, 0, 1);
+//    m_model.setToIdentity();
+//    m_model.rotate(180.0f - (m_xRot / 16.0f), 1, 0, 0);
+//    m_model.rotate(m_yRot / 16.0f, 0, 1, 0);
+//    m_model.rotate(m_zRot / 16.0f, 0, 0, 1);
 
-    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
-    m_program->bind();
+//    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
+//    m_program->bind();
 
-    // Set modelview-projection matrix
-    m_program->setUniformValue(m_mvp_matrix_loc, m_projection * m_view * m_model);
-    QMatrix3x3 normal_matrix = m_model.normalMatrix();
+//    // Set modelview-projection matrix
+//    m_program->setUniformValue(m_mvp_matrix_loc, m_projection * m_view * m_model);
+//    QMatrix3x3 normal_matrix = m_model.normalMatrix();
 
-    // Set normal matrix
-    m_program->setUniformValue(m_normal_matrix_loc, normal_matrix);
+//    // Set normal matrix
+//    m_program->setUniformValue(m_normal_matrix_loc, normal_matrix);
 
-    //glDrawArrays(GL_TRIANGLES, 0, m_logo.vertexCount());
+//    //glDrawArrays(GL_TRIANGLES, 0, m_logo.vertexCount());
+    simManager->drawSystem();
 
-    m_program->release();
+//    m_program->release();
+}
+
+void GLWidget::updateSimulation()
+{
+    simManager->updateSystem();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -253,11 +255,21 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     int dy = event->position().y() - m_last_position.y();
 
     if (event->buttons() & Qt::LeftButton) {
-        setXRotation(m_xRot + 8 * dy);
-        setYRotation(m_yRot + 8 * dx);
+        //setXRotation(m_xRot + 8 * dy);
+        //setYRotation(m_yRot + 8 * dx);
     } else if (event->buttons() & Qt::RightButton) {
-        setXRotation(m_xRot + 8 * dy);
-        setZRotation(m_zRot + 8 * dx);
+        //setXRotation(m_xRot + 8 * dy);
+        //setZRotation(m_zRot + 8 * dx);
     }
     m_last_position = event->pos();
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *event)
+{
+    printf("%d\n", event->key());
+    if(event->key() == Qt::Key_Space)
+    {
+        simManager->initialize();
+        return;
+    }
 }

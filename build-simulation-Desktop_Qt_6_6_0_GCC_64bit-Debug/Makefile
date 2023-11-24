@@ -53,14 +53,22 @@ OBJECTS_DIR   = obj/
 ####### Files
 
 SOURCES       = ../app/glwidget.cpp \
+		../app/MassParticle.cpp \
+		../app/Spring.cpp \
 		../app/main.cpp \
+		../app/massspringsystem.cpp \
+		../app/simulationmanager.cpp \
 		../app/window.cpp \
 		../app/mainwindow.cpp qrc_shaders.cpp \
 		moc/moc_glwidget.cpp \
 		moc/moc_window.cpp \
 		moc/moc_mainwindow.cpp
 OBJECTS       = obj/glwidget.o \
+		obj/MassParticle.o \
+		obj/Spring.o \
 		obj/main.o \
+		obj/massspringsystem.o \
+		obj/simulationmanager.o \
 		obj/window.o \
 		obj/mainwindow.o \
 		obj/qrc_shaders.o \
@@ -224,9 +232,18 @@ DIST          = ../../../Qt/6.6.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/6.6.0/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/6.6.0/gcc_64/mkspecs/features/lex.prf \
 		../app/simulation.pro ../app/glwidget.h \
+		../app/MassParticle.h \
+		../app/Spring.h \
+		../app/massspringsystem.h \
+		../app/mesh.h \
+		../app/simulationmanager.h \
 		../app/window.h \
 		../app/mainwindow.h ../app/glwidget.cpp \
+		../app/MassParticle.cpp \
+		../app/Spring.cpp \
 		../app/main.cpp \
+		../app/massspringsystem.cpp \
+		../app/simulationmanager.cpp \
 		../app/window.cpp \
 		../app/mainwindow.cpp
 QMAKE_TARGET  = simulation
@@ -583,8 +600,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../app/shaders.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/6.6.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../app/glwidget.h ../app/window.h ../app/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../app/glwidget.cpp ../app/main.cpp ../app/window.cpp ../app/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../app/glwidget.h ../app/MassParticle.h ../app/Spring.h ../app/massspringsystem.h ../app/mesh.h ../app/simulationmanager.h ../app/window.h ../app/mainwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../app/glwidget.cpp ../app/MassParticle.cpp ../app/Spring.cpp ../app/main.cpp ../app/massspringsystem.cpp ../app/simulationmanager.cpp ../app/window.cpp ../app/mainwindow.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1379,8 +1396,186 @@ obj/glwidget.o: ../app/glwidget.cpp ../app/glwidget.h \
 		../../../Qt/6.6.0/gcc_64/include/QtCore/qthread.h \
 		../../../Qt/6.6.0/gcc_64/include/QtCore/qrunnable.h \
 		../../../Qt/6.6.0/gcc_64/include/QtCore/qexception.h \
-		../../../Qt/6.6.0/gcc_64/include/QtCore/qpromise.h
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpromise.h \
+		../app/simulationmanager.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/QTimer \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtimer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/glwidget.o ../app/glwidget.cpp
+
+obj/MassParticle.o: ../app/MassParticle.cpp ../app/MassParticle.h \
+		../app/mesh.h \
+		../app/Spring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/QVector3D \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qvectornd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversionchecks.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfiginclude.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcore-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfigmacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcoreexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qassert.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtnoop.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypes.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversion.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompare_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconstructormacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qdarwinhelpers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qexceptionhandling.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qforeach.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttypetraits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qfunctionpointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmalloc.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qminmax.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qoverload.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qswap.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtresource.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttranslation.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtgui-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtguiexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtmetamacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20type_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q23utility.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydataops.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qxptype_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20functional.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20memory.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringliteral.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlatin1stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qanystringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qutf8stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringtokenizer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmath.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qalgorithms.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/MassParticle.o ../app/MassParticle.cpp
+
+obj/Spring.o: ../app/Spring.cpp ../app/Spring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/QVector3D \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qvectornd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversionchecks.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfiginclude.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcore-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfigmacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcoreexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qassert.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtnoop.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypes.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversion.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompare_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconstructormacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qdarwinhelpers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qexceptionhandling.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qforeach.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttypetraits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qfunctionpointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmalloc.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qminmax.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qoverload.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qswap.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtresource.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttranslation.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtgui-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtguiexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtmetamacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20type_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q23utility.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydataops.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qxptype_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20functional.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20memory.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringliteral.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlatin1stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qanystringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qutf8stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringtokenizer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmath.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qalgorithms.h \
+		../app/MassParticle.h \
+		../app/mesh.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Spring.o ../app/Spring.cpp
 
 obj/main.o: ../app/main.cpp ../../../Qt/6.6.0/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/6.6.0/gcc_64/include/QtWidgets/qapplication.h \
@@ -1603,99 +1798,197 @@ obj/main.o: ../app/main.cpp ../../../Qt/6.6.0/gcc_64/include/QtWidgets/QApplicat
 		../app/mainwindow.h \
 		../../../Qt/6.6.0/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt/6.6.0/gcc_64/include/QtWidgets/qmainwindow.h \
-		../../../Qt/6.6.0/gcc_64/include/QtWidgets/qtabwidget.h \
-		../app/external/glm-0.9.7.1/glm/glm.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/_fixes.hpp \
-		../app/external/glm-0.9.7.1/glm/fwd.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_int.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/setup.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_float.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/precision.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat.hpp \
-		../app/external/glm-0.9.7.1/glm/vec2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/_swizzle.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/_swizzle_func.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec2.inl \
-		../app/external/glm-0.9.7.1/glm/vec3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec3.inl \
-		../app/external/glm-0.9.7.1/glm/vec4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec4.inl \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec4_sse2.inl \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec4_avx.inl \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec4_avx2.inl \
-		../app/external/glm-0.9.7.1/glm/mat2x2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat2x2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat2x2.inl \
-		../app/external/glm-0.9.7.1/glm/mat2x3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat2x3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat2x3.inl \
-		../app/external/glm-0.9.7.1/glm/mat2x4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat2x4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat2x4.inl \
-		../app/external/glm-0.9.7.1/glm/mat3x2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat3x2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat3x2.inl \
-		../app/external/glm-0.9.7.1/glm/mat3x3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat3x3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat3x3.inl \
-		../app/external/glm-0.9.7.1/glm/mat3x4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat3x4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat3x4.inl \
-		../app/external/glm-0.9.7.1/glm/mat4x2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat4x2.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat4x2.inl \
-		../app/external/glm-0.9.7.1/glm/mat4x3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat4x3.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat4x3.inl \
-		../app/external/glm-0.9.7.1/glm/mat4x4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat4x4.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_mat4x4.inl \
-		../app/external/glm-0.9.7.1/glm/trigonometric.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_trigonometric.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_trigonometric.inl \
-		../app/external/glm-0.9.7.1/glm/detail/_vectorize.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec1.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_vec1.inl \
-		../app/external/glm-0.9.7.1/glm/exponential.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_exponential.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_exponential.inl \
-		../app/external/glm-0.9.7.1/glm/detail/func_vector_relational.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_vector_relational.inl \
-		../app/external/glm-0.9.7.1/glm/common.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_common.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_common.inl \
-		../app/external/glm-0.9.7.1/glm/packing.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_packing.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_packing.inl \
-		../app/external/glm-0.9.7.1/glm/detail/type_half.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/type_half.inl \
-		../app/external/glm-0.9.7.1/glm/geometric.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_geometric.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_geometric.inl \
-		../app/external/glm-0.9.7.1/glm/matrix.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_matrix.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_matrix.inl \
-		../app/external/glm-0.9.7.1/glm/vector_relational.hpp \
-		../app/external/glm-0.9.7.1/glm/integer.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_integer.hpp \
-		../app/external/glm-0.9.7.1/glm/detail/func_integer.inl \
-		../app/external/glm-0.9.7.1/glm/gtc/matrix_transform.hpp \
-		../app/external/glm-0.9.7.1/glm/gtc/constants.hpp \
-		../app/external/glm-0.9.7.1/glm/gtc/constants.inl \
-		../app/external/glm-0.9.7.1/glm/gtc/matrix_transform.inl \
-		../app/external/glm-0.9.7.1/glm/gtc/type_ptr.hpp \
-		../app/external/glm-0.9.7.1/glm/gtc/quaternion.hpp \
-		../app/external/glm-0.9.7.1/glm/gtc/quaternion.inl \
-		../app/external/glm-0.9.7.1/glm/gtc/type_ptr.inl \
-		../app/external/glm-0.9.7.1/glm/gtx/rotate_vector.hpp \
-		../app/external/glm-0.9.7.1/glm/gtx/transform.hpp \
-		../app/external/glm-0.9.7.1/glm/gtx/transform.inl \
-		../app/external/glm-0.9.7.1/glm/gtx/rotate_vector.inl
+		../../../Qt/6.6.0/gcc_64/include/QtWidgets/qtabwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o ../app/main.cpp
+
+obj/massspringsystem.o: ../app/massspringsystem.cpp ../app/MassParticle.h \
+		../app/mesh.h \
+		../app/Spring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/QVector3D \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qvectornd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversionchecks.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfiginclude.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcore-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfigmacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcoreexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qassert.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtnoop.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypes.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversion.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompare_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconstructormacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qdarwinhelpers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qexceptionhandling.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qforeach.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttypetraits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qfunctionpointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmalloc.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qminmax.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qoverload.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qswap.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtresource.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttranslation.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtgui-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtGui/qtguiexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtmetamacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20type_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q23utility.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydataops.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qxptype_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20functional.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20memory.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringliteral.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlatin1stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qanystringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qutf8stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringtokenizer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmath.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qalgorithms.h \
+		../app/massspringsystem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/massspringsystem.o ../app/massspringsystem.cpp
+
+obj/simulationmanager.o: ../app/simulationmanager.cpp ../app/simulationmanager.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/QTimer \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtimer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversionchecks.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfiginclude.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcore-config.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtconfigmacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtcoreexports.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qassert.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtnoop.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypes.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtversion.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompare_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qconstructormacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qdarwinhelpers.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qexceptionhandling.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qforeach.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttypetraits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qfunctionpointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmalloc.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qminmax.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qoverload.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qswap.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtresource.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qttranslation.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbasictimer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtmetamacros.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qfunctionaltools_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qarraydataops.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qxptype_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20functional.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20memory.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearrayview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringfwd.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/q20type_traits.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringliteral.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlatin1stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qanystringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qutf8stringview.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringtokenizer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcompare.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qiodevicebase.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qfloat16.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmath.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qiterable.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qmetacontainer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qcontainerinfo.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qtaggedpointer.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qscopeguard.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/6.6.0/gcc_64/include/QtCore/qbindingstorage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/simulationmanager.o ../app/simulationmanager.cpp
 
 obj/window.o: ../app/window.cpp ../app/glwidget.h \
 		../../../Qt/6.6.0/gcc_64/include/QtOpenGLWidgets/QOpenGLWidget \
