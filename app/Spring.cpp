@@ -19,6 +19,23 @@ QVector3D Spring::getForce(MassParticle *refMass) //calculate force on refMass
 
 }
 
+QVector3D Spring::getDampingForce(MassParticle *refMass)
+{
+    QVector3D direction = (massB->getPosition() - massA->getPosition());
+    direction.normalize();
+    float dampingForce = (mu * QVector3D::dotProduct(massB->getVelocity() - massA->getVelocity(), direction));
+    return ((refMass==massA)? direction : -1.0f*direction) * dampingForce;
+}
+
+QVector3D Spring::getSpringForce(MassParticle *refMass)
+{
+    float distance = massA->getPosition().distanceToPoint(massB->getPosition());
+    float springForce = k * (distance - d_rest);
+    QVector3D direction = (massB->getPosition() - massA->getPosition());
+    direction.normalize();
+    return ((refMass==massA)? direction : -1.0f*direction) * springForce;
+}
+
 void Spring::draw()
 {
     glLineWidth(1.0);
@@ -30,12 +47,33 @@ void Spring::draw()
     glEnd();
 }
 
-const Mesh *Spring::getMesh() const
+const MassParticle *Spring::getMassA() const
 {
-    return mesh;
+    return massA;
 }
 
-void Spring::setMesh(Mesh *newMesh)
+const MassParticle *Spring::getMassB() const
 {
-    mesh = newMesh;
+    return massB;
 }
+
+QMatrix3x3 Spring::getJx() const
+{
+    return Jx;
+}
+
+QMatrix3x3 Spring::getJv() const
+{
+    return Jv;
+}
+
+void Spring::setJx(const QMatrix3x3 &newJx)
+{
+    Jx = newJx;
+}
+
+void Spring::setJv(const QMatrix3x3 &newJv)
+{
+    Jv = newJv;
+}
+

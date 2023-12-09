@@ -75,8 +75,8 @@ GLWidget::GLWidget(QWidget *parent)
         setFormat(fmt);
     }
     // initialize update/draw timers
-    float updatesPerSecond = 120;
-    float drawsPerSecond = 60;
+    float updatesPerSecond = 240;
+    float drawsPerSecond = 120;
 
     drawTimer = new QTimer(this);
     connect(drawTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -107,6 +107,11 @@ QSize GLWidget::sizeHint() const
     return QSize(400, 400);
 }
 
+void GLWidget::resetSimulation()
+{
+    simManager->reset();
+}
+
 static void qNormalizeAngle(int &angle)
 {
     while (angle < 0)
@@ -124,6 +129,16 @@ void GLWidget::cleanup()
     delete m_program;
     m_program = 0;
     doneCurrent();
+}
+
+void GLWidget::setSpringConstant(int percent)
+{
+    simManager->setSpringConstants(1000.0f * percent/100.0f);
+}
+
+void GLWidget::setDampingConstant(int percent)
+{
+    simManager->setDampingConstants(1000.0f * percent/100.0f);
 }
 
 void GLWidget::initializeGL()

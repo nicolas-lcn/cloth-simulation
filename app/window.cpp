@@ -59,6 +59,7 @@
 #include <QGuiApplication>
 #include <QApplication>
 #include <QMessageBox>
+#include <QLabel>
 
 Window::Window(MainWindow *mw)
     : mainWindow(mw)
@@ -72,11 +73,45 @@ Window::Window(MainWindow *mw)
 
     QWidget *w = new QWidget;
     w->setLayout(container);
-    mainLayout->addWidget(w);
+    w->setFixedSize(900,800);
+    mainLayout->addWidget(w, 0, Qt::AlignCenter);
+    mainLayout->setContentsMargins(25, 25, 25, 25);
 
-
+    resetBtn = new QPushButton(tr("Reset"), this);
+    connect(resetBtn, &QPushButton::clicked, this, &Window::resetSimulation);
     setLayout(mainLayout);
 
+    QVBoxLayout *sliders = new QVBoxLayout;
+    mainLayout->addLayout(sliders);
+
+    QLabel *springConstantLabel = new QLabel("Spring Constant");
+    QSlider *springConstantSlider = new QSlider(Qt::Horizontal);
+    springConstantSlider->setRange(0, 100);
+    springConstantSlider->setSingleStep(5);
+    springConstantSlider->setPageStep(5);
+    springConstantSlider->setTickInterval(5);
+    springConstantSlider->setTickPosition(QSlider::TicksRight);
+
+    QLabel *dampingConstantLabel = new QLabel("Damping Constant");
+    QSlider *dampingConstantSlider = new QSlider(Qt::Horizontal);
+    dampingConstantSlider->setRange(0, 100);
+    dampingConstantSlider->setSingleStep(5);
+    dampingConstantSlider->setPageStep(5);
+    dampingConstantSlider->setTickInterval(5);
+    dampingConstantSlider->setTickPosition(QSlider::TicksRight);
+
+    sliders->addWidget(springConstantLabel, 1, Qt::AlignTop);
+    sliders->addWidget(springConstantSlider, 0, Qt::AlignTop);
+    sliders->addWidget(dampingConstantLabel, 1, Qt::AlignTop);
+    sliders->addWidget(dampingConstantSlider, 0, Qt::AlignTop);
+
+    connect(springConstantSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setSpringConstant(int)));
+    connect(glWidget, SIGNAL(springConstantChanged(int)), springConstantSlider, SLOT(setValue(int)));
+    connect(dampingConstantSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setDampingConstant(int)));
+    connect(glWidget, SIGNAL(dampingConstantChanged(int)), dampingConstantSlider, SLOT(setValue(int)));
+
+    springConstantSlider->setValue(100);
+    dampingConstantSlider->setValue(5);
     setWindowTitle(tr("Simulation"));
 }
 
@@ -84,7 +119,7 @@ Window::Window(MainWindow *mw)
 void Window::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Escape)
-        close();
+        QCoreApplication::quit();
     else
         QWidget::keyPressEvent(e);
 }
@@ -105,7 +140,7 @@ void Window::dockUndock()
     } else {
         if (!mainWindow->centralWidget()) {
             if (mainWindow->isVisible()) {
-                setAttribute(Qt::WA_DeleteOnClose, false);
+                setAttribute(Qt::WA_DeleteOnClose, true);
                 dockBtn->setText(tr("Undock"));
                 mainWindow->setCentralWidget(this);
             } else {
@@ -115,4 +150,9 @@ void Window::dockUndock()
             QMessageBox::information(0, tr("Cannot dock"), tr("Main window already occupied"));
         }
     }
+}
+
+void Window::resetSimulation()
+{
+    glWidget->resetSimulation();
 }

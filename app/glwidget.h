@@ -74,13 +74,18 @@ public:
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
 
+    void resetSimulation();
+
 public slots:
     void paintGL() override;
     void updateSimulation();
     void cleanup();
+    void setSpringConstant(int percent);
+    void setDampingConstant(int percent);
 
 signals:
-
+    void springConstantChanged(int percent);
+    void dampingConstantChanged(int percent);
 
 
 protected:

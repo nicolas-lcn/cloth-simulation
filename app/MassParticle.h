@@ -5,7 +5,7 @@
 #ifndef MASSPARTICLE_H
 #define MASSPARTICLE_H
 
-class Mesh;
+
 class Spring;
 class MassParticle{
 public:
@@ -19,30 +19,32 @@ public:
     void setVelocity(const QVector3D &newVelocity);
 
     QVector3D computeForces(); //gravity & springs
+    QVector3D computeDampingForces();
+    float computeDampingValue();
+    QVector3D computeSpringForces();
     void update(float dt);
+    void update(float dt, float prev_dt);
 
     void draw();
 
     void addSpring(Spring* spring);
 
-
-    const Mesh *getMesh() const;
-    void setMesh(const Mesh *newMesh);
-
     bool IsFixed() const;
     void setIsFixed(bool newIsFixed);
+    QVector3D getPrevious() const;
+    void setPrevious(const QVector3D &newPrevious);
 
 private:
     float mass;
     QVector3D position, velocity;
-
-    const Mesh *mesh;
 
     bool isFixed = false;
 
     std::vector<Spring*> springs;
 
     QVector3D gravity = QVector3D(0.0, -9.81, 0.0);
+
+    QVector3D previous;
 
 
 };
@@ -77,16 +79,6 @@ inline void MassParticle::setVelocity(const QVector3D &newVelocity)
     velocity = newVelocity;
 }
 
-inline const Mesh *MassParticle::getMesh() const
-{
-    return mesh;
-}
-
-inline void MassParticle::setMesh(const Mesh* newMesh)
-{
-    mesh = newMesh;
-}
-
 inline bool MassParticle::IsFixed() const
 {
     return isFixed;
@@ -101,6 +93,6 @@ inline void MassParticle::setIsFixed(bool newIsFixed)
 
 
 inline MassParticle::MassParticle(float mass, const QVector3D &position) : mass(mass),
-    position(position), isFixed(false)
+    position(position), isFixed(false), previous(QVector3D(position.x(), position.y(), position.z()))
 {}
 

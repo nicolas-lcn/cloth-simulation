@@ -10,6 +10,7 @@ HEADERS       = glwidget.h \
                 massspringsystem.h \
                 mesh.h \
                 simulationmanager.h \
+                sphere.h \
                 window.h \
                 mainwindow.h
 SOURCES       = glwidget.cpp \
@@ -18,6 +19,7 @@ SOURCES       = glwidget.cpp \
                 main.cpp \
                 massspringsystem.cpp \
                 simulationmanager.cpp \
+                sphere.cpp \
                 window.cpp \
                 mainwindow.cpp
 

@@ -1,10 +1,10 @@
 #include <QVector3D>
+#include <QMatrix3x3>
 #include <memory>
 
 #ifndef SPRING_H
 #define SPRING_H
 class MassParticle;
-class Mesh;
 class Spring
 {
 public:
@@ -18,12 +18,22 @@ public:
     void setD_rest(float newD_rest);
 
     QVector3D getForce(MassParticle* refMass);
+    QVector3D getDampingForce(MassParticle *refMass);
+    QVector3D getSpringForce(MassParticle *refMass);
 
     void draw();
 
+    const MassParticle *getMassA() const;
 
-    const Mesh *getMesh() const;
-    void setMesh(Mesh *newMesh);
+    const MassParticle *getMassB() const;
+
+    QMatrix3x3 getJx() const;
+
+    QMatrix3x3 getJv() const;
+
+    void setJx(const QMatrix3x3 &newJx);
+
+    void setJv(const QMatrix3x3 &newJv);
 
 private:
     float k; //raideur
@@ -33,7 +43,8 @@ private:
     const MassParticle *massA;
     const MassParticle *massB;
 
-    const Mesh *mesh;
+    QMatrix3x3 Jx; // Jacobian matrix pos;
+    QMatrix3x3 Jv; //Jacobian matrix velocity;
 
 };
 
