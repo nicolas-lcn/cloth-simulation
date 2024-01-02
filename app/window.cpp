@@ -65,6 +65,7 @@ Window::Window(MainWindow *mw)
     : mainWindow(mw)
 {
     glWidget = new GLWidget;
+    glWidget->setAttribute(Qt::WA_DeleteOnClose, true);
     mainWindow->setFixedSize(1000, 1000);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -72,6 +73,7 @@ Window::Window(MainWindow *mw)
     container->addWidget(glWidget);
 
     QWidget *w = new QWidget;
+    w->setAttribute(Qt::WA_DeleteOnClose, true);
     w->setLayout(container);
     w->setFixedSize(900,800);
     mainLayout->addWidget(w, 0, Qt::AlignCenter);
@@ -110,8 +112,8 @@ Window::Window(MainWindow *mw)
     connect(dampingConstantSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setDampingConstant(int)));
     connect(glWidget, SIGNAL(dampingConstantChanged(int)), dampingConstantSlider, SLOT(setValue(int)));
 
-    springConstantSlider->setValue(100);
-    dampingConstantSlider->setValue(5);
+    springConstantSlider->setValue(0);
+    dampingConstantSlider->setValue(0);
     setWindowTitle(tr("Simulation"));
 }
 
@@ -156,3 +158,7 @@ void Window::resetSimulation()
 {
     glWidget->resetSimulation();
 }
+
+
+
+

@@ -58,6 +58,13 @@
 #include <QMatrix4x4>
 #include "logo.h"
 
+namespace SimulationParameters
+{
+static const int fps = 60;
+static const int frame = 15;
+static const int timer = (int) ((1.0f / fps) * 1000 - frame);
+}
+
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 class SimulationManager;
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions

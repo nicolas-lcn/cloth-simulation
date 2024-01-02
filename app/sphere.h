@@ -14,6 +14,8 @@ public:
 
     void draw();
 
+    float getRadius() const;
+
 private:
     QVector3D center;
     float radius;

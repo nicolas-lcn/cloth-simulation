@@ -67,24 +67,15 @@ GLWidget::GLWidget(QWidget *parent)
 {
     setUpdatesEnabled(true);
     m_core = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
-    // --transparent causes the clear color to be transparent. Therefore, on systems that
-    // support it, the widget will become transparent apart from the logo.
-    if (m_transparent) {
-        QSurfaceFormat fmt = format();
-        fmt.setAlphaBufferSize(8);
-        setFormat(fmt);
-    }
-    // initialize update/draw timers
-    float updatesPerSecond = 240;
-    float drawsPerSecond = 120;
+
 
     drawTimer = new QTimer(this);
     connect(drawTimer, SIGNAL(timeout()), this, SLOT(update()));
-    drawTimer->start(1000.0/drawsPerSecond);
+    drawTimer->start(SimulationParameters::timer);
 
     updateTimer = new QTimer(this);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateSimulation()));
-    updateTimer->start(1000.0/updatesPerSecond);
+    updateTimer->start(SystemParameters::t);
 
     simManager = new SimulationManager();
     simManager->initialize();
@@ -133,12 +124,12 @@ void GLWidget::cleanup()
 
 void GLWidget::setSpringConstant(int percent)
 {
-    simManager->setSpringConstants(1000.0f * percent/100.0f);
+    simManager->setSpringConstants(simManager->getK() * percent/100.0f);
 }
 
 void GLWidget::setDampingConstant(int percent)
 {
-    simManager->setDampingConstants(1000.0f * percent/100.0f);
+    simManager->setDampingConstants(simManager->getC_damp() * percent/100.0f);
 }
 
 void GLWidget::initializeGL()

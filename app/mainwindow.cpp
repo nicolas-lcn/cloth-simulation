@@ -54,6 +54,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
+
 MainWindow::MainWindow()
 {
 //    QMenuBar *menuBar = new QMenuBar;
@@ -74,3 +75,5 @@ void MainWindow::onAddNew()
     else
         QMessageBox::information(0, tr("Cannot add new window"), tr("Already occupied. Undock first."));
 }
+
+

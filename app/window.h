@@ -71,6 +71,7 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+
 private slots:
     void dockUndock();
     void resetSimulation();

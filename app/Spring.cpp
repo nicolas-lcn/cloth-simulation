@@ -56,24 +56,3 @@ const MassParticle *Spring::getMassB() const
 {
     return massB;
 }
-
-QMatrix3x3 Spring::getJx() const
-{
-    return Jx;
-}
-
-QMatrix3x3 Spring::getJv() const
-{
-    return Jv;
-}
-
-void Spring::setJx(const QMatrix3x3 &newJx)
-{
-    Jx = newJx;
-}
-
-void Spring::setJv(const QMatrix3x3 &newJv)
-{
-    Jv = newJv;
-}
-

@@ -64,8 +64,8 @@ void MassParticle::update(float dt)
     QVector3D acceleration = forces/mass;
 
     //euler
-//     position = position + velocity * dt;
-//     velocity = velocity + dt * acceleration;
+    //position = position + velocity * dt;
+    //velocity = velocity + dt * acceleration;
 
     // verlet
     position = 2 * position - previous + acceleration * (dt * dt);

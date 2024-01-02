@@ -24,3 +24,8 @@ void Sphere::draw()
     glVertex3f(center.x(), center.y(), center.z());
     glEnd();
 }
+
+float Sphere::getRadius() const
+{
+    return radius;
+}

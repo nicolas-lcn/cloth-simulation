@@ -27,14 +27,6 @@ public:
 
     const MassParticle *getMassB() const;
 
-    QMatrix3x3 getJx() const;
-
-    QMatrix3x3 getJv() const;
-
-    void setJx(const QMatrix3x3 &newJx);
-
-    void setJv(const QMatrix3x3 &newJv);
-
 private:
     float k; //raideur
     float mu; //friction pour damping
@@ -42,9 +34,6 @@ private:
 
     const MassParticle *massA;
     const MassParticle *massB;
-
-    QMatrix3x3 Jx; // Jacobian matrix pos;
-    QMatrix3x3 Jv; //Jacobian matrix velocity;
 
 };
 
