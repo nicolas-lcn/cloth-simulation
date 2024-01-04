@@ -3,11 +3,17 @@
 
 #include <assert.h>
 #include <cstdio>
+#include "constraints.h"
 
 
 std::vector<Eigen::Vector3f> SystemBuilder::getVbuff() const
 {
     return vbuff;
+}
+
+float *SystemBuilder::getVertexBuffer() const
+{
+    return vertexBuffer;
 }
 
 void SystemBuilder::uniformGrid(unsigned int n, float time_step, float rest_length, float stiffness, float mass, float damping_factor, float gravity, int width)
@@ -132,7 +138,27 @@ void SystemBuilder::generateVbuff(unsigned int n, int width)
         x = (float)-width/2.0f;
         for(unsigned int j = 0; j<n; j++)
         {
-            vbuff[n*i+j] = Eigen::Vector3f(x,0.0f,z);
+            vbuff[n*i+j] = Eigen::Vector3f(x,z,0.0f);
+            x+=(float)step;
+        }
+        z-=step;
+    }
+}
+
+void SystemBuilder::generateVertexBuffer(unsigned int n, int width)
+{
+    vertexBuffer = new float[3*n*n];
+    float step = ((float)width/(n-1));
+    float x,z;
+    z = (float)width/2.0f;
+    for(unsigned int i = 0; i<n; i++)
+    {
+        x = (float)-width/2.0f;
+        for(unsigned int j = 0; j<n; j++)
+        {
+            vertexBuffer[3*n*i+j+0] = x;
+            vertexBuffer[3*n*i+j+1] = 0.0;
+            vertexBuffer[3*n*i+j+2] = z;
             x+=(float)step;
         }
         z-=step;

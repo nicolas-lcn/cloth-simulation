@@ -13,6 +13,28 @@ void SystemDrawer::draw(std::vector<Eigen::Vector3f> vbuff,
     }
 }
 
+void SystemDrawer::draw(float *vbuff, Edges edges)
+{
+    for(Edge e : edges)
+    {
+        Vector3f p0 = Vector3f(vbuff[3 * e.first + 0], vbuff[3 * e.first + 1], vbuff[3 * e.first + 2]);
+        Vector3f p1 = Vector3f(vbuff[3 * e.second + 0], vbuff[3 * e.second + 1], vbuff[3 * e.second + 2]);
+        drawPoint(p0); drawPoint(p1);
+        drawLine(p0, p1);
+    }
+}
+
+void SystemDrawer::draw(Eigen::VectorXf vbuff, Edges edges)
+{
+    for(Edge e : edges)
+    {
+        Vector3f p0 = Vector3f(vbuff[3 * e.first + 0], vbuff[3 * e.first + 1], vbuff[3 * e.first + 2]);
+        Vector3f p1 = Vector3f(vbuff[3 * e.second + 0], vbuff[3 * e.second + 1], vbuff[3 * e.second + 2]);
+        drawPoint(p0); drawPoint(p1);
+        drawLine(p0, p1);
+    }
+}
+
 void SystemDrawer::drawPoint(Vector3f position)
 {
     glColor4f(0.0, 0.5, 1.0, 1.0);

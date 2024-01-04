@@ -6,6 +6,7 @@
 #include <vector>
 
 class MassSpringSystem;
+class Constraint;
 class SystemBuilder
 {
 private:
@@ -21,6 +22,7 @@ private:
     MassSpringSystem *system;
 
     std::vector<Eigen::Vector3f> vbuff;
+    float* vertexBuffer;
 
 public:
     void uniformGrid(
@@ -35,13 +37,16 @@ public:
         );
 
     void generateVbuff(unsigned int n, int width);
-
+    void generateVertexBuffer(unsigned int n, int width);
 
     Indexes getStructI() const;
     Indexes getShearI() const;
     Indexes getBendI() const;
     MassSpringSystem *getSystem() const;
     std::vector<Eigen::Vector3f> getVbuff() const;
+    float *getVertexBuffer() const;
+
+
 };
 
 #endif // SYSTEMBUILDER_H

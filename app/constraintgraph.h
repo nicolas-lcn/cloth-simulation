@@ -11,10 +11,10 @@ class MassSpringSystem;
 class Node{
 protected:
     MassSpringSystem *system;
-    std::vector<Eigen::Vector3f> vbuff;
+    Eigen::VectorXf vbuff;
 
 public:
-    Node(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    Node(MassSpringSystem *system, Eigen::VectorXf vbuff);
 
     virtual void satisfy() = 0; //satisfy constraint;
     virtual bool accept(NodeVisitor &visitor) = 0;
@@ -22,7 +22,7 @@ public:
 
 class PointNode : public Node{
 public:
-    PointNode(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    PointNode(MassSpringSystem *system, Eigen::VectorXf vbuff);
 
     virtual bool isConstrained(unsigned int i) const = 0 ;
 
@@ -35,7 +35,7 @@ public:
 class SpringNode : public Node
 {
 public:
-    SpringNode(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    SpringNode(MassSpringSystem *system, Eigen::VectorXf vbuff);
     void addChild(Node * node);
     void removeChild(Node *node);
 
@@ -51,7 +51,7 @@ public:
 class RootNode : public SpringNode
 {
 public:
-    RootNode(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    RootNode(MassSpringSystem *system, Eigen::VectorXf vbuff);
     virtual void satisfy();
     virtual bool accept(NodeVisitor &visitor);
 };
@@ -59,7 +59,7 @@ public:
 class FixedPointNode : public PointNode
 {
 public:
-    FixedPointNode(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    FixedPointNode(MassSpringSystem *system, Eigen::VectorXf vbuff);
     virtual void fixPoint(unsigned int i);
     virtual void releasePoint(unsigned int i);
 protected:
@@ -86,7 +86,7 @@ private:
     unsigned int nbIter;
     // Node interface
 public:
-    SpringDeformationNode(float crit_def, unsigned int nbIter, MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    SpringDeformationNode(float crit_def, unsigned int nbIter, MassSpringSystem *system, Eigen::VectorXf vbuff);
 
     virtual void satisfy();
 
@@ -105,7 +105,7 @@ private :
 
     // Node interface
 public:
-    SphereCollisionNode(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff);
+    SphereCollisionNode(MassSpringSystem *system, Eigen::VectorXf vbuff);
     virtual void satisfy();
 
     // PointNode interface
@@ -124,7 +124,7 @@ class FixedPointVisitor : public NodeVisitor
 {
 private:
     unsigned int i;
-    bool result = false;
+    bool result;
 
     // NodeVisitor interface
 public:

@@ -40,30 +40,31 @@ void SimulationManager::initialize()
     sb->generateVbuff(SystemParameters::n, SystemParameters::width);
     std::vector<Eigen::Vector3f> vbuff = sb->getVbuff();
     system->setVbuff(vbuff);
+    //sb->generateVertexBuffer(SystemParameters::n, SystemParameters::width);
 //    for(Eigen::Vector3f v: vbuff)
 //    {
 //        qDebug()<<v[0]<<","<<v[1]<<","<<v[2];
 //    }
     //init solver
     solver = new MassSpringSolver(system, system->getVbuff());
-
-
+    solver->setupConstraints(sb, SystemParameters::n);
+    solver->computeMatrices();
     // deformation constraint parameters
-    const float crit_def = 0.4f; // critical spring deformation
-    const unsigned int nbIter = 15; // number of iterations
+//    const float crit_def = 0.4f; // critical spring deformation
+//    const unsigned int nbIter = 15; // number of iterations
 
     // constraint graph
-    rootNode = new RootNode(system, system->getVbuff());
-    SpringDeformationNode *deformationNode =
-        new SpringDeformationNode(crit_def, nbIter, system, system->getVbuff());
-    deformationNode->addSprings(sb->getShearI());
-    deformationNode->addSprings(sb->getStructI());
-    FixedPointNode *cornerFixer = new FixedPointNode(system, system->getVbuff());
-    cornerFixer->fixPoint(0);
-    //cornerFixer->fixPoint(SystemParameters::n-1);
+//    rootNode = new RootNode(system, solver->getCurrent());
+//    SpringDeformationNode *deformationNode =
+//        new SpringDeformationNode(crit_def, nbIter, system, solver->getCurrent());
+//    deformationNode->addSprings(sb->getShearI());
+//    deformationNode->addSprings(sb->getStructI());
+//    FixedPointNode *cornerFixer = new FixedPointNode(system, solver->getCurrent());
+//    cornerFixer->fixPoint(0);
+//    cornerFixer->fixPoint(SystemParameters::n-1);
 
-    rootNode->addChild(deformationNode);
-    deformationNode->addChild(cornerFixer);
+    //rootNode->addChild(deformationNode);
+    //deformationNode->addChild(cornerFixer);
 //    deltaTimer = new QElapsedTimer();
 //    deltaTimer->start();
 //    previous_dt = 0.0f;
@@ -148,11 +149,12 @@ void SimulationManager::initialize()
 
 void SimulationManager::updateSystem()
 {
-    SatisfyVisitor visitor;
-    visitor.satisfy(*rootNode);
-    solver->solve(SystemParameters::iter);
-    solver->solve(SystemParameters::iter);
 
+//    SatisfyVisitor visitor;
+//    visitor.satisfy(*rootNode);
+
+    solver->solve(SystemParameters::iter);
+    solver->solve(SystemParameters::iter);
 
 
     //system->VbuffToState(solver->getCurrent());

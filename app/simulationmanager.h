@@ -4,7 +4,7 @@
 
 namespace SystemParameters
 {
-    static const int n = 5;
+    static const int n = 33;
     static const float width = 1.0f;
     static const float t = 0.008f; // timestep
     static const float r = width / (n-1);

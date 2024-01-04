@@ -16,6 +16,10 @@ private:
 public:
     void draw(std::vector<Eigen::Vector3f> vbuff,
          Edges edges);
+    void draw(float* vbuff,
+              Edges edges);
+    void draw(Eigen::VectorXf vbuff,
+              Edges edges);
 
 
 };
