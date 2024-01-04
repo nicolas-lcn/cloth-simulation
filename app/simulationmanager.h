@@ -4,7 +4,7 @@
 
 namespace SystemParameters
 {
-    static const int n = 33;
+    static const int n = 11;
     static const float width = 1.0f;
     static const float t = 0.008f; // timestep
     static const float r = width / (n-1);
@@ -19,9 +19,6 @@ namespace SystemParameters
 
 
 class MassSpringSystem;
-//class MassParticle;
-//class Sphere;
-class RootNode;
 class MassSpringSolver;
 class SystemDrawer;
 class SystemBuilder;
@@ -37,25 +34,19 @@ public:
     void reset();
     void setDampingConstants(float value);
     void setSpringConstants(float value);
-    //bool detectCollisions(Sphere* sphere, MassParticle* m);
-    //void handleCollisions(Sphere* sphere);
-
-
 
     float getK() const;
 
     float getC_damp() const;
 
 private:
-    //QElapsedTimer *deltaTimer;
 
     MassSpringSystem *system;
     MassSpringSolver *solver;
-    RootNode *rootNode; //constraint graph;
 
     SystemDrawer *drawer;
     SystemBuilder *sb;
-    //Sphere* object;
+
 };
 
 #endif // SIMULATIONMANAGER_H

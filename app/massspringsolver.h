@@ -34,7 +34,7 @@ private:
 
     // state
     VectorXf current; //q(n)
-    Map mapCurrent;
+
     VectorXf previous; //q(n-1)
     VectorXf spring_dirs;
     VectorXf inertial_term; // M * y, y = (a + 1) * q(n) - a * q(n - 1)
@@ -47,13 +47,14 @@ private:
 
 public:
     MassSpringSolver(MassSpringSystem* system, std::vector<Eigen::Vector3f> vbuff);
-    MassSpringSolver(MassSpringSystem* system, float* vbuff);
+
     void solve(unsigned int n);
     VectorXf& getCurrent();
     std::vector<Constraint *> getConstraints() const;
     void setConstraints(const std::vector<Constraint *> &newConstraints);
     void computeMatrices();
     void setupConstraints(SystemBuilder *sb, int n);
+    void clearConstraints();
 };
 
 #endif // MASSSPRINGSOLVER_H

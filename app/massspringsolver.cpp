@@ -83,6 +83,15 @@ void MassSpringSolver::setupConstraints(SystemBuilder *sb, int n)
     }
 }
 
+void MassSpringSolver::clearConstraints()
+{
+    for (unsigned int i = 0; i < constraints.size(); ++i)
+    {
+        delete constraints[i];
+    }
+    constraints.clear();
+}
+
 void MassSpringSolver::globalStep()
 {
     float h2 = system->getTimeStep() * system->getTimeStep();
@@ -95,35 +104,16 @@ void MassSpringSolver::globalStep()
 
 void MassSpringSolver::localStep()
 {
-//    unsigned int j = 0;
-//    Edges edges = system->getSprings();
-//    MassSpringSolver::VectorXf rest_lengths = system->getVd_rest();
-//    for(Edge &e : edges)
-//    {
-//        Vector3f p12(
-//                current[3 * e.first + 0] - current[3 * e.second + 0],
-//                current[3 * e.first + 1] - current[3 * e.second + 1],
-//                current[3 * e.first + 2] - current[3 * e.second + 2]
-//            );
-
-//        p12.normalize();
-//        spring_dirs[3 * j + 0] =  qDebug()<<current[0]<<" "<<current[1]<<" "<<current[2];rest_lengths[j] * p12[0];
-//        spring_dirs[3 * j + 1] = rest_lengths[j] * p12[1];
-//        spring_dirs[3 * j + 2] = rest_lengths[j] * p12[2];
-//        j++;
-//    }
     spring_dirs.resize(3 * constraints.size());
     spring_dirs.setZero(3 * constraints.size());
     for (unsigned int index = 0; index < constraints.size(); index++)
     {
         constraints[index]->EvaluateD(index, current, spring_dirs);
     }
-
-
 }
 
 MassSpringSolver::MassSpringSolver(MassSpringSystem *system, std::vector<Eigen::Vector3f> vbuff)
-    : system(system),mapCurrent(new float[1], 1),
+    : system(system),
     spring_dirs(system->getNbSprings()*3)
 {
     unsigned int nbPoints = system->getNbPoints();
@@ -137,58 +127,6 @@ MassSpringSolver::MassSpringSolver(MassSpringSystem *system, std::vector<Eigen::
     }
     current = state;
     previous = current;
-}
-
-MassSpringSolver::MassSpringSolver(MassSpringSystem *system, float *vbuff):
-    system(system),mapCurrent(vbuff, 3*system->getNbPoints()), previous(mapCurrent),
-    spring_dirs(system->getNbSprings()*3)
-{
-    float h2 = system->getTimeStep() * system->getTimeStep();
-    unsigned int nbPoints = system->getNbPoints();
-
-    // compute Mass, Stiffness and length matrices M,
-    Triplets LTriplets, JTriplets, MTriplets;
-
-    stiffnessMatrix.resize(3*nbPoints, 3 * nbPoints);
-    unsigned int k = 0 ; //springs coutner;
-    for(Edge &e : system->getSprings())
-    {
-        for(unsigned int j=0; j<3; j++)
-        {
-            LTriplets.push_back(Triplet(3*e.first + j, 3 * e.first + j, 1 * system->getVk()[k]));
-            LTriplets.push_back(Triplet(3*e.first + j, 3 * e.second + j, -1 * system->getVk()[k]));
-            LTriplets.push_back(Triplet(3*e.second + j, 3 * e.first + j, -1 * system->getVk()[k]));
-            LTriplets.push_back(Triplet(3*e.second + j, 3 * e.second + j, 1 * system->getVk()[k]));
-        }
-        k++;
-    }
-    stiffnessMatrix.setFromTriplets(LTriplets.begin(), LTriplets.end());
-
-    J.resize(3*nbPoints, 3*system->getNbSprings());
-    k=0;
-    Edges edges = system->getSprings();
-    for(Edge &e : edges)
-    {
-        for(unsigned int j = 0 ; j < 3 ; j++)
-        {
-            JTriplets.push_back(Triplet(3*e.first + j, 3 * k + j, 1 * system->getVk()[k]));
-            JTriplets.push_back(Triplet(3*e.second + j, 3 * k + j, -1 * system->getVk()[k]));
-        }
-        k++;
-    }
-    J.setFromTriplets(JTriplets.begin(), JTriplets.end());
-
-    massMatrix.resize(3 * nbPoints, 3* nbPoints);
-    for(unsigned int i = 0; i < nbPoints; i++)
-    {
-        for(unsigned int j = 0; j< 3; j++)
-            MTriplets.push_back(Triplet(3*i+j, 3*i+j, system->getVmasses()[i] ));
-    }
-    massMatrix.setFromTriplets(MTriplets.begin(), MTriplets.end());
-
-    //pre-factor system matrix
-    SparseMatrix A = massMatrix + h2 * stiffnessMatrix;
-    matrix.compute(A);
 }
 
 void MassSpringSolver::solve(unsigned int n)
