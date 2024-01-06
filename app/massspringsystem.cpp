@@ -66,7 +66,7 @@ void MassSpringSystem::VbuffToState(VectorXf &state)
     }
 }
 
-std::vector<Eigen::Vector3f> MassSpringSystem::getVbuff() const
+std::vector<Eigen::Vector3f> MassSpringSystem::getVbuff()
 {
     return vbuff;
 }
@@ -74,6 +74,17 @@ std::vector<Eigen::Vector3f> MassSpringSystem::getVbuff() const
 void MassSpringSystem::setVbuff(const std::vector<Eigen::Vector3f> &newVbuff)
 {
     vbuff = newVbuff;
+}
+
+void MassSpringSystem::handleSphereCollision(Eigen::Vector3f center, float radius, unsigned int i)
+{
+    Eigen::Vector3f p(vbuff[i] - center);
+
+    if (p.norm() < radius) {
+        p.normalize();
+        p = radius * p;
+    }
+    vbuff[i] = p + center;
 }
 
 MassSpringSystem::MassSpringSystem(unsigned int nbPoints, unsigned int nbSprings, float timeStep, const MassSpringSystem::Edges &springs, const MassSpringSystem::VectorXf &Vd_rest, const MassSpringSystem::VectorXf &Vk, const MassSpringSystem::VectorXf &Vmasses, const MassSpringSystem::VectorXf &Vextf, float damping) : nbPoints(nbPoints),

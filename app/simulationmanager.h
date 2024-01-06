@@ -22,7 +22,7 @@ class MassSpringSystem;
 class MassSpringSolver;
 class SystemDrawer;
 class SystemBuilder;
-
+class Sphere;
 class SimulationManager
 {
 public:
@@ -34,6 +34,7 @@ public:
     void reset();
     void setDampingConstants(float value);
     void setSpringConstants(float value);
+    void collisionDetection();
 
     float getK() const;
 
@@ -46,6 +47,8 @@ private:
 
     SystemDrawer *drawer;
     SystemBuilder *sb;
+
+    Sphere *object;
 
 };
 

@@ -41,8 +41,9 @@ public:
 
     void stateToVbuff(Eigen::VectorXf state);
     void VbuffToState(Eigen::VectorXf &state);
-    std::vector<Eigen::Vector3f> getVbuff() const;
+    std::vector<Eigen::Vector3f> getVbuff();
     void setVbuff(const std::vector<Eigen::Vector3f> &newVbuff);
+    void handleSphereCollision(Eigen::Vector3f center, float radius, unsigned int i); //i is the index of vertex that collides;
 };
 
 

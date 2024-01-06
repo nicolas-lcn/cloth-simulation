@@ -1,24 +1,26 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include <QVector3D>
+#include <Dense>
 
 class Sphere
 {
+private:
+    typedef Eigen::Vector3f Vector3f;
+    Vector3f center;
+    float radius;
 public:
-    Sphere(QVector3D c, float r);
+    Sphere(Vector3f c, float r);
 
-    bool isInSphere(QVector3D p);
+    bool isInSphere(Vector3f p, Vector3f &penetration); //return penetration
 
-    QVector3D getCenter() const;
+    Vector3f getCenter() const;
 
     void draw();
 
     float getRadius() const;
 
-private:
-    QVector3D center;
-    float radius;
+
 
 };
 

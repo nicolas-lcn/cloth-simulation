@@ -138,7 +138,7 @@ void SystemBuilder::generateVbuff(unsigned int n, int width)
         x = (float)-width/2.0f;
         for(unsigned int j = 0; j<n; j++)
         {
-            vbuff[n*i+j] = Eigen::Vector3f(x,z,0.0f);
+            vbuff[n*i+j] = Eigen::Vector3f(x,0.8f,z);
             x+=(float)step;
         }
         z-=step;
