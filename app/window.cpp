@@ -112,8 +112,8 @@ Window::Window(MainWindow *mw)
     connect(dampingConstantSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setDampingConstant(int)));
     connect(glWidget, SIGNAL(dampingConstantChanged(int)), dampingConstantSlider, SLOT(setValue(int)));
 
-    springConstantSlider->setValue(0);
-    dampingConstantSlider->setValue(0);
+    springConstantSlider->setValue(100);
+    dampingConstantSlider->setValue(100);
     setWindowTitle(tr("Simulation"));
 }
 

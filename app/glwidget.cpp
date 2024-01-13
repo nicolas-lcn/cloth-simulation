@@ -55,6 +55,8 @@
 #include <math.h>
 #include <QTimer>
 #include "simulationmanager.h"
+#include <QDebug>
+#include <GL/glu.h>
 
 bool GLWidget::m_transparent = false;
 
@@ -124,12 +126,12 @@ void GLWidget::cleanup()
 
 void GLWidget::setSpringConstant(int percent)
 {
-    simManager->setSpringConstants(simManager->getK() * percent/100.0f);
+    simManager->setSpringConstants(SystemParameters::k * ((float)percent/100.0f));
 }
 
 void GLWidget::setDampingConstant(int percent)
 {
-    simManager->setDampingConstants(simManager->getC_damp() * percent/100.0f);
+    simManager->setDampingConstants(SystemParameters::c_damp * ((float)percent/100.0f));
 }
 
 void GLWidget::initializeGL()
@@ -253,6 +255,26 @@ void GLWidget::resizeGL(int w, int h)
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     m_last_position = event->pos();
+    // Convert 2D screen coordinates to 3D world coordinates
+    GLint viewport[4];
+    GLdouble modelview[16];
+    GLdouble projection[16];
+    GLdouble x, y, z;
+
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    // Unproject the 2D mouse coordinates to get 3D coordinates
+    gluUnProject(m_last_position.x(), viewport[3] - m_last_position.y(), 0.0,
+                 modelview, projection, viewport, &x, &y, &z);
+
+    // Now, (x, y, z) contains the 3D coordinates of the mouse click
+    qDebug() << "Mouse Click 3D Coordinates: (" << x << ", " << y << ", " << z << ")";
+
+    // Use the obtained 3D coordinates for further processing
+    //int selectedVertex = findClosestVertex(x, y, z);
+    //qDebug() << "Selected Vertex: " << selectedVertex;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)

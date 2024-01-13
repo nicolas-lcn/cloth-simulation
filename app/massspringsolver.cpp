@@ -59,9 +59,9 @@ void MassSpringSolver::setupConstraints(SystemBuilder *sb, int n)
 {
     constraints = std::vector<Constraint*>();
 
-    // fixed point constraints
-    //constraints.push_back(new FixedPoint(0, system->getVbuff()[0], system->getVk()));
-    //constraints.push_back(new FixedPoint(n-1, system->getVbuff()[n-1], system->getVk()));
+     //fixed point constraints
+    constraints.push_back(new FixedPoint(0, system->getVbuff()[0], system->getVk()));
+    constraints.push_back(new FixedPoint(n-1, system->getVbuff()[n-1], system->getVk()));
 
 //    //struct spring constraints
 //    for(unsigned int i = 0; i<sb->getStructI().size(); i++)

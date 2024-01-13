@@ -44,7 +44,7 @@ void SimulationManager::initialize()
     solver = new MassSpringSolver(system, system->getVbuff());
     solver->setupConstraints(sb, SystemParameters::n);
     solver->computeMatrices();
-    object = new Sphere(Eigen::Vector3f(0.0f, 0.0f, 0.0f), 0.5f);
+    //object = new Sphere(Eigen::Vector3f(0.0f, 0.0f, 0.0f), 0.5f);
 
 }
 
@@ -52,7 +52,7 @@ void SimulationManager::updateSystem()
 {
     solver->solve(SystemParameters::iter);
     solver->solve(SystemParameters::iter);
-    collisionDetection();
+    //collisionDetection();
 
 }
 
@@ -66,18 +66,22 @@ void SimulationManager::reset()
 //    system->reset();
     delete system;
     solver->clearConstraints();
+    //Print Paramaters
+    qDebug()<<"System Parameters";
+    qDebug()<<"System stiffness : "<<SystemParameters::k;
+    qDebug()<<"System damping : "<<SystemParameters::c_damp;
     initialize();
 }
 
 void SimulationManager::setDampingConstants(float value)
 {
-    SystemParameters::k = value;
+    SystemParameters::c_damp = value;
     //reset();
 }
 
 void SimulationManager::setSpringConstants(float value)
 {
-    SystemParameters::c_damp = value;
+    SystemParameters::k = value;
     //reset();
 }
 

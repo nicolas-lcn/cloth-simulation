@@ -4,6 +4,8 @@ OBJECTS_DIR = ./obj
 INCLUDEPATH += $$PWD
 INCLUDEPATH +=  external/Eigen
 
+LIBS += -lGLU
+
 HEADERS       = glwidget.h \
                 constraints.h \
                 massspringsolver.h \
