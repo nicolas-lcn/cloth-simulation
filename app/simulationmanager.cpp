@@ -7,6 +7,7 @@
 #include "sphere.h"
 #include "systembuilder.h"
 #include "systemdrawer.h"
+#include "constraints.h"
 #include <ostream>
 #include <QTime>
 #include <QDebug>
@@ -22,9 +23,14 @@ SimulationManager::~SimulationManager()
 
 void SimulationManager::initialize()
 {
+    //Print Paramaters
+    qDebug()<<"System Parameters";
+    qDebug()<<"System stiffness : "<<SystemParameters::k;
+    qDebug()<<"System damping : "<<SystemParameters::c_damp;
     //init system
     drawer = new SystemDrawer();
     sb = new SystemBuilder();
+    qDebug()<<"Initializing...";
     sb->uniformGrid(
         SystemParameters::n,
         SystemParameters::t,
@@ -44,7 +50,7 @@ void SimulationManager::initialize()
     solver = new MassSpringSolver(system, system->getVbuff());
     solver->setupConstraints(sb, SystemParameters::n);
     solver->computeMatrices();
-    //object = new Sphere(Eigen::Vector3f(0.0f, 0.0f, 0.0f), 0.5f);
+    object = new Sphere(Eigen::Vector3f(0.0f, 0.0f, 0.0f), 0.2f);
 
 }
 
@@ -52,13 +58,14 @@ void SimulationManager::updateSystem()
 {
     solver->solve(SystemParameters::iter);
     solver->solve(SystemParameters::iter);
-    //collisionDetection();
+    if(isDetectionToggleOn) collisionDetection();
 
 }
 
 void SimulationManager::drawSystem()
 {
     drawer->draw(system->getVbuff(), system->getSprings());
+    if(isDetectionToggleOn) object->draw();
 }
 
 void SimulationManager::reset()
@@ -66,10 +73,7 @@ void SimulationManager::reset()
 //    system->reset();
     delete system;
     solver->clearConstraints();
-    //Print Paramaters
-    qDebug()<<"System Parameters";
-    qDebug()<<"System stiffness : "<<SystemParameters::k;
-    qDebug()<<"System damping : "<<SystemParameters::c_damp;
+
     initialize();
 }
 
@@ -115,6 +119,14 @@ void SimulationManager::collisionDetection()
 
 }
 
+void SimulationManager::drawConstraints()
+{
+    for(Constraint * c : solver->getConstraints())
+    {
+        c->draw();
+    }
+}
+
 float SimulationManager::getK() const
 {
     return SystemParameters::k;
@@ -123,4 +135,41 @@ float SimulationManager::getK() const
 float SimulationManager::getC_damp() const
 {
     return SystemParameters::c_damp;
+}
+
+void SimulationManager::handleClick(float x, float y, float z)
+{
+    float minDist = FLT_MAX;
+    if(selectedConstraint != -1)
+        solver->getConstraints()[selectedConstraint]->ungrab();
+    unsigned int best_candidate = -1;
+    for(unsigned int i = 0; i<solver->getConstraints().size(); i++)
+    {
+        Constraint *c = solver->getConstraints()[i];
+        float dist = c->distance(Eigen::Vector3f(x,y,0.0f));
+        if(dist < minDist)
+        {
+            minDist = dist;
+            best_candidate = i;
+        }
+    }
+    if(best_candidate !=-1)
+    {
+        selectedConstraint = best_candidate;
+        solver->getConstraints()[selectedConstraint]->grab();
+    }
+}
+
+void SimulationManager::handleMouvement(float dx, float dy, float dz)
+{
+    solver->getConstraints()[selectedConstraint]->move(Eigen::Vector3f(dx,dy, dz));
+}
+
+void SimulationManager::addConstraint(float x, float y, float z)
+{
+}
+
+void SimulationManager::setIsDetectionToggleOn(bool newIsDetectionToggleOn)
+{
+    isDetectionToggleOn = newIsDetectionToggleOn;
 }

@@ -22,6 +22,7 @@ void MassSpringSolver::setConstraints(const std::vector<Constraint *> &newConstr
 
 void MassSpringSolver::computeMatrices()
 {
+    qDebug()<<"Computing Matrices...";
     float h2 = system->getTimeStep() * system->getTimeStep();
     unsigned int nbPoints = system->getNbPoints();
     // compute Mass, Stiffness and length matrices M,
@@ -90,6 +91,12 @@ void MassSpringSolver::clearConstraints()
         delete constraints[i];
     }
     constraints.clear();
+}
+
+void MassSpringSolver::addConstraint(Constraint *c)
+{
+    constraints.push_back(c);
+    computeMatrices();
 }
 
 void MassSpringSolver::globalStep()

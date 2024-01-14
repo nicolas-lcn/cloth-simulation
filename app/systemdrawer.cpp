@@ -44,6 +44,7 @@ void SystemDrawer::drawPoint(Vector3f position)
     glEnd();
 }
 
+
 void SystemDrawer::drawLine(Vector3f start, Vector3f end)
 {
     glLineWidth(1.0);

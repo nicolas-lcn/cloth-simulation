@@ -15,7 +15,8 @@ HEADERS       = glwidget.h \
                 systembuilder.h \
                 systemdrawer.h \
                 window.h \
-                mainwindow.h
+                mainwindow.h\
+                Mesh.h
 SOURCES       = glwidget.cpp \
                 constraints.cpp \
                 main.cpp \

@@ -35,10 +35,17 @@ public:
     void setDampingConstants(float value);
     void setSpringConstants(float value);
     void collisionDetection();
+    void drawConstraints();
 
     float getK() const;
 
     float getC_damp() const;
+
+    void handleClick(float x, float y, float z);
+    void handleMouvement(float dx, float dy, float dz);
+    void addConstraint(float x, float y, float z);
+
+    void setIsDetectionToggleOn(bool newIsDetectionToggleOn);
 
 private:
 
@@ -49,6 +56,9 @@ private:
     SystemBuilder *sb;
 
     Sphere *object;
+
+    unsigned int selectedConstraint = -1;
+    bool isDetectionToggleOn = false;
 
 };
 

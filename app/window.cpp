@@ -123,7 +123,7 @@ void Window::keyPressEvent(QKeyEvent *e)
     if (e->key() == Qt::Key_Escape)
         QCoreApplication::quit();
     else
-        QWidget::keyPressEvent(e);
+        glWidget->keyPressEvent(e);
 }
 
 void Window::dockUndock()

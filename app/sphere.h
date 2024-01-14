@@ -1,14 +1,23 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
+#include "Mesh.h"
 #include <Dense>
 
-class Sphere
+
+
+class Sphere /*: public Mesh*/
 {
 private:
     typedef Eigen::Vector3f Vector3f;
     Vector3f center;
     float radius;
+
+    //draw
+    const int slices = 30;  // Number of slices
+    const int stacks = 30;  // Number of stacks
+
+
 public:
     Sphere(Vector3f c, float r);
 
@@ -16,12 +25,18 @@ public:
 
     Vector3f getCenter() const;
 
+    float getRadius() const;
     void draw();
 
-    float getRadius() const;
 
 
 
+
+    // Mesh interface
+//public:
+//    virtual void draw();
+//    virtual void createVBO();
+//    virtual void initVAO();
 };
 
 #endif // SPHERE_H

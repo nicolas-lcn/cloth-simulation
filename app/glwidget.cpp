@@ -159,50 +159,50 @@ void GLWidget::initializeGL()
 
 //    glClearColor(0, 0, 0, m_transparent ? 0 : 1);
 
-//    m_program = new QOpenGLShaderProgram;
-//    // Compile vertex shader
-//    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
-//        close();
+    m_program = new QOpenGLShaderProgram;
+    // Compile vertex shader
+    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vshader.glsl"))
+        close();
 
-//    // Compile fragment shader
-//    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fshader.glsl"))
-//        close();
+    // Compile fragment shader
+    if (!m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fshader.glsl"))
+        close();
 
-//    m_program->bindAttributeLocation("vertex", 0);
-//    m_program->bindAttributeLocation("normal", 1);
+    m_program->bindAttributeLocation("vertex", 0);
+    m_program->bindAttributeLocation("normal", 1);
 
-//    // Link shader pipeline
-//    if (!m_program->link())
-//        close();
+    // Link shader pipeline
+    if (!m_program->link())
+        close();
 
-//    // Bind shader pipeline for use
-//    if (!m_program->bind())
-//        close();
+    // Bind shader pipeline for use
+    if (!m_program->bind())
+        close();
 
-//    m_mvp_matrix_loc = m_program->uniformLocation("mvp_matrix");
-//    m_normal_matrix_loc = m_program->uniformLocation("normal_matrix");
-//    m_light_pos_loc = m_program->uniformLocation("light_position");
+    m_mvp_matrix_loc = m_program->uniformLocation("mvp_matrix");
+    m_normal_matrix_loc = m_program->uniformLocation("normal_matrix");
+    m_light_pos_loc = m_program->uniformLocation("light_position");
 
-//    // Create a vertex array object. In OpenGL ES 2.0 and OpenGL 2.x
-//    // implementations this is optional and support may not be present
-//    // at all. Nonetheless the below code works in all cases and makes
-//    // sure there is a VAO when one is needed.
+    // Create a vertex array object. In OpenGL ES 2.0 and OpenGL 2.x
+    // implementations this is optional and support may not be present
+    // at all. Nonetheless the below code works in all cases and makes
+    // sure there is a VAO when one is needed.
 //    m_vao.create();
 //    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
 
-//    // Setup our vertex buffer object.
+    // Setup our vertex buffer object.
 
-//    // Store the vertex attribute bindings for the program.
-//    setupVertexAttribs();
+    // Store the vertex attribute bindings for the program.
+    setupVertexAttribs();
 
-//    // Our camera never changes in this example.
-//    m_view.setToIdentity();
-//    m_view.translate(0, 0, -1);
+    // Our camera never changes in this example.
+    m_view.setToIdentity();
+    m_view.translate(0, 0, -3);
 
-//    // Light position is fixed.
-//    m_program->setUniformValue(m_light_pos_loc, QVector3D(0, 0, 70));
+    // Light position is fixed.
+    m_program->setUniformValue(m_light_pos_loc, QVector3D(0, 0, 70));
 
-//    m_program->release();
+    m_program->release();
 }
 
 void GLWidget::setupVertexAttribs()
@@ -220,25 +220,27 @@ void GLWidget::paintGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-//    m_model.setToIdentity();
-//    m_model.rotate(180.0f - (m_xRot / 16.0f), 1, 0, 0);
-//    m_model.rotate(m_yRot / 16.0f, 0, 1, 0);
-//    m_model.rotate(m_zRot / 16.0f, 0, 0, 1);
+    m_model.setToIdentity();
+    //m_model.rotate(180.0f - (m_xRot / 16.0f), 1, 0, 0);
+    //m_model.rotate(m_yRot / 16.0f, 0, 1, 0);
+    //m_model.rotate(m_zRot / 16.0f, 0, 0, 1);
 
-//    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
-//    m_program->bind();
+   // QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
+    m_program->bind();
 
-//    // Set modelview-projection matrix
-//    m_program->setUniformValue(m_mvp_matrix_loc, m_projection * m_view * m_model);
-//    QMatrix3x3 normal_matrix = m_model.normalMatrix();
+    // Set modelview-projection matrix
+    m_program->setUniformValue(m_mvp_matrix_loc, m_projection * m_view * m_model);
+    QMatrix3x3 normal_matrix = m_model.normalMatrix();
 
-//    // Set normal matrix
-//    m_program->setUniformValue(m_normal_matrix_loc, normal_matrix);
+    // Set normal matrix
+    m_program->setUniformValue(m_normal_matrix_loc, normal_matrix);
 
 //    //glDrawArrays(GL_TRIANGLES, 0, m_logo.vertexCount());
-    simManager->drawSystem();
 
-//    m_program->release();
+    simManager->drawSystem();
+    simManager->drawConstraints();
+
+    m_program->release();
 }
 
 void GLWidget::updateSimulation()
@@ -270,8 +272,13 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
                  modelview, projection, viewport, &x, &y, &z);
 
     // Now, (x, y, z) contains the 3D coordinates of the mouse click
-    qDebug() << "Mouse Click 3D Coordinates: (" << x << ", " << y << ", " << z << ")";
+    //qDebug() << "Mouse Click 3D Coordinates: (" << x << ", " << y << ", " << z << ")";
+    if (event->buttons() & Qt::LeftButton) {
+        simManager->handleClick(x,y,z);
+    }
+    else if (event->buttons() & Qt::RightButton) {
 
+    }
     // Use the obtained 3D coordinates for further processing
     //int selectedVertex = findClosestVertex(x, y, z);
     //qDebug() << "Selected Vertex: " << selectedVertex;
@@ -285,6 +292,10 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton) {
         //setXRotation(m_xRot + 8 * dy);
         //setYRotation(m_yRot + 8 * dx);
+        if(toggleZMode)
+            simManager->handleMouvement((float)dx * 0.005f,0.0f, (float)-dy * 0.005f);
+        else
+            simManager->handleMouvement((float)dx * 0.005f, (float)-dy * 0.005f, 0.0f);
     } else if (event->buttons() & Qt::RightButton) {
         //setXRotation(m_xRot + 8 * dy);
         //setZRotation(m_zRot + 8 * dx);
@@ -294,10 +305,17 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void GLWidget::keyPressEvent(QKeyEvent *event)
 {
-    printf("%d\n", event->key());
-    if(event->key() == Qt::Key_Space)
+    //qDebug()<<event->key();
+    if(event->key() == Qt::Key_Z)
     {
-        simManager->initialize();
+        toggleZMode = !toggleZMode;
+        //simManager->initialize();
+        return;
+    }
+    if(event->key() == Qt::Key_S)
+    {
+        toggleCollisionDetection = !toggleCollisionDetection;
+        simManager->setIsDetectionToggleOn(toggleCollisionDetection);
         return;
     }
 }

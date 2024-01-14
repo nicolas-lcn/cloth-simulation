@@ -82,6 +82,7 @@ public:
     QSize sizeHint() const override;
 
     void resetSimulation();
+    void keyPressEvent(QKeyEvent *event) override;
 
 public slots:
     void paintGL() override;
@@ -100,7 +101,7 @@ protected:
     void resizeGL(int width, int height) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
+
 
 private:
     void setupVertexAttribs();
@@ -110,6 +111,14 @@ private:
     int m_yRot;
     int m_zRot;
     QPoint m_last_position;
+
+    bool toggleZMode = false;
+    bool toggleCollisionDetection = false;
+    /* Simulation Mode
+     * 0 : Hang cloth
+     * 1 : Drop
+     * */
+    unsigned int SimulationMode = 0;
 
     QOpenGLVertexArrayObject m_vao;
     QOpenGLBuffer m_vbo;

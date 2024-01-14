@@ -1,5 +1,5 @@
 #include "constraints.h"
-
+#include <QtOpenGL>
 
 Eigen::VectorXf Constraint::getStiffnesses() const
 {
@@ -51,6 +51,38 @@ void FixedPoint::EvaluateJ(unsigned int index, Triplets &JTriplets)
         for(unsigned int j = 0 ; j < 3 ; j++)
             JTriplets.push_back(Triplet(3*p0 + j, 3 * index + j, 1 * ks));
 
+}
+
+void FixedPoint::draw()
+{
+    if(isGrabbed)
+        glColor4f(0.0, 1.0, 0.0, 1.0);
+    else
+        glColor4f(1.0, 0.0, 0.0, 1.0);
+    glPointSize(5.0);
+    glBegin(GL_POINTS);
+    glVertex3f(fixed[0], fixed[1], fixed[2]);
+    glEnd();
+}
+
+float FixedPoint::distance(Eigen::Vector3f p)
+{
+    return (Eigen::Vector2f(p.x(), p.y()) - Eigen::Vector2f(fixed.x(), fixed.y())).squaredNorm();
+}
+
+void FixedPoint::grab()
+{
+    isGrabbed = true;
+}
+
+void FixedPoint::ungrab()
+{
+    isGrabbed = false;
+}
+
+void FixedPoint::move(Eigen::Vector3f movement)
+{
+    fixed += movement;
 }
 
 SpringConstraint::SpringConstraint(const Eigen::VectorXf &stiffnesses) : Constraint(stiffnesses)

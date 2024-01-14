@@ -55,6 +55,7 @@ public:
     void computeMatrices();
     void setupConstraints(SystemBuilder *sb, int n);
     void clearConstraints();
+    void addConstraint(Constraint * c);
 };
 
 #endif // MASSSPRINGSOLVER_H
