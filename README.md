@@ -8,9 +8,9 @@ Simulation de textile par système masse-ressort
 
 ## Captures d'écran
 
-- [Collision sphère](https://github.com/nicolas-lcn/cloth-simulation/blob/main/docs/sms-ie-sphere.png)
+![Collision sphère](https://github.com/nicolas-lcn/cloth-simulation/blob/main/docs/sms-ie-sphere.png)
 
-- [Système à deux points fixes](https://github.com/nicolas-lcn/cloth-simulation/blob/main/docs/sms-implicit-euler.png)
+![Système à deux points fixes](https://github.com/nicolas-lcn/cloth-simulation/blob/main/docs/sms-implicit-euler.png)
 
 ## Documents
 
